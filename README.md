@@ -4,4 +4,4 @@ Windows software uninstaller. Especially useful for speeding up Visual Studio by
 
 ![screenshot](TotalUninstaller/img/screenshot.png)
 
-Adapted from code by [konste](https://totaluninstaller.codeplex.com/)
+Adapted from code by [Konstantin](https://totaluninstaller.codeplex.com/)
