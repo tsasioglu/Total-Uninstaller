@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Deployment.WindowsInstaller;
 
@@ -57,16 +58,14 @@ namespace TotalUninstaller
                 return;
 
             string plural = count > 1 ? "s" : String.Empty;
-
-            var result = Dialog.TaskDialog(new System.Windows.Interop.WindowInteropHelper(_view).Handle, 
-                                           IntPtr.Zero,
-                                           String.Format("Uninstall {0} item{1}", count, plural),
-                                           String.Format("Are you sure you want to uninstall the selected {0} item{1}?", count, plural), 
-                                           "Stuff could break.",
-                                           TaskDialogButtons.Yes | TaskDialogButtons.No, 
-                                           TaskDialogIcon.Warning);
-
-            if (result == TaskDialogResult.No)
+            
+            var result =
+                MessageBox.Show(
+                    String.Format("Are you sure you want to uninstall the selected {0} item{1}?", count, plural),
+                    String.Format("Uninstall {0} item{1}", count, plural),
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            
+            if (result == MessageBoxResult.No)
                 return;
 
             foreach (InstalledItem item in itemsToUninstall)
