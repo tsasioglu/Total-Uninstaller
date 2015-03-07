@@ -3,8 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Deployment.WindowsInstaller;
 
 namespace TotalUninstaller
@@ -58,20 +59,21 @@ namespace TotalUninstaller
                 return;
 
             string plural = count > 1 ? "s" : String.Empty;
-            
-            var result =
-                MessageBox.Show(
-                    String.Format("Are you sure you want to uninstall the selected {0} item{1}?", count, plural),
-                    String.Format("Uninstall {0} item{1}", count, plural),
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            
-            if (result == MessageBoxResult.No)
-                return;
 
-            foreach (InstalledItem item in itemsToUninstall)
-                Uninstall(item);
+            Task<MessageDialogResult> task = _view.ShowMessageAsync(String.Format("Uninstall {0} item{1}", count, plural),
+                                                                    String.Format("Are you sure you want to uninstall the selected {0} item{1}?", count, plural),
+                                                                    MessageDialogStyle.AffirmativeAndNegative);
 
-            LoadUninstallableItems();
+            task.ContinueWith(t =>
+            {
+                if (t.Result == MessageDialogResult.Negative)
+                    return;
+
+                foreach (InstalledItem item in itemsToUninstall)
+                    Uninstall(item);
+
+                LoadUninstallableItems();
+            });
         }
 
         private static void Uninstall(InstalledItem item)
