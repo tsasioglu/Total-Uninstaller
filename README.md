@@ -1,6 +1,6 @@
 # Total-Uninstaller
 
-Windows software uninstaller. Especially useful for speeding up Visual Studio by removing some of the bloat.
+Windows software uninstaller. Especially useful for speeding up Visual Studio by removing some of the bloat. Must be run as admin.
 
 ![screenshot](TotalUninstaller/img/screenshot.png)
 
