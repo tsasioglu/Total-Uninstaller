@@ -38,6 +38,7 @@ namespace TotalUninstaller
         private void LoadUninstallableItems()
         {
             var installations = ProductInstallation.GetProducts(null, "s-1-1-0", UserContexts.All)
+                                                   .Where(ins  => ins.ProductName != null)
                                                    .Select(ins => new InstalledItem(ins.ProductName, 
                                                                                     ins.ProductCode, 
                                                                                     ins.InstallDate, 
