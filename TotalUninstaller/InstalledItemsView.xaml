@@ -7,10 +7,11 @@
         xmlns:totalUninstaller="clr-namespace:TotalUninstaller"
         d:DataContext="{d:DesignData InstalledItemsViewModel}"
         mc:Ignorable="d"
-        EnableDWMDropShadow="True"
         ResizeMode="CanResizeWithGrip"
         WindowState="Maximized"
         Title="Total Uninstaller" 
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
         TitleCaps="False">
     <controls:MetroWindow.Resources>
         <totalUninstaller:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/> 
@@ -71,6 +72,7 @@
                 Style="{StaticResource AccentedSquareButtonStyle}"
                 controls:ButtonHelper.PreserveTextCase="True"/>
         <controls:MetroProgressBar Grid.Row="1"
+                                   Background="LightBlue"
                                    VerticalAlignment="Bottom"
                                    Value="{Binding UninstallProgress}" />
     </Grid>
