@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:totalUninstaller="clr-namespace:TotalUninstaller"
         d:DataContext="{d:DesignData InstalledItemsViewModel}"
         mc:Ignorable="d"
         EnableDWMDropShadow="True"
@@ -11,6 +12,9 @@
         WindowState="Maximized"
         Title="Total Uninstaller" 
         TitleCaps="False">
+    <controls:MetroWindow.Resources>
+        <totalUninstaller:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/> 
+    </controls:MetroWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -33,13 +37,41 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Row="1"
-                Margin="5" 
-                HorizontalAlignment="Center" 
+        <StackPanel Grid.Row="1" 
+                    Margin="0,3,0,3"
+                    Orientation="Horizontal"
+                    Background="LightBlue">
+            <Button Margin="5" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" 
+                    Content="Uninstall selected items" 
+                    Command="{Binding UninstallCommand}" 
+                    Style="{StaticResource AccentedSquareButtonStyle}"
+                    controls:ButtonHelper.PreserveTextCase="True"/>
+            <TextBlock VerticalAlignment="Center" 
+                       Visibility="{Binding UninstallInProgress, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Run Text="Uninstalling item "/>
+                <Run Text="{Binding UninstallCurrent}"></Run>
+                <Run Text=" of "/>
+                <Run Text="{Binding UninstallTotal}"></Run>
+                <Run Text="..."/>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center" 
+                       Visibility="{Binding Cancelling, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Text="Cancelling...">
+            </TextBlock>
+        </StackPanel>
+        <Button Grid.Row="1" 
+                Margin="5"
+                Visibility="{Binding UninstallInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
+                HorizontalAlignment="Right" 
                 VerticalAlignment="Center" 
-                Content="Uninstall selected items" 
-                Command="{Binding UninstallCommand}" 
+                Content="Cancel" 
+                Command="{Binding CancelUninstallCommand}" 
                 Style="{StaticResource AccentedSquareButtonStyle}"
                 controls:ButtonHelper.PreserveTextCase="True"/>
+        <controls:MetroProgressBar Grid.Row="1"
+                                   VerticalAlignment="Bottom"
+                                   Value="{Binding UninstallProgress}" />
     </Grid>
 </controls:MetroWindow>

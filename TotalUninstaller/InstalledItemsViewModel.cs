@@ -15,6 +15,7 @@ namespace TotalUninstaller
         private readonly InstalledItemsView _view;
 
         public ICommand UninstallCommand { get; set; }
+        public ICommand CancelUninstallCommand { get; set; }
 
         private ObservableCollection<InstalledItem> _items; 
         public  ObservableCollection<InstalledItem> Items 
@@ -26,13 +27,81 @@ namespace TotalUninstaller
                 OnPropertyChanged();
             } 
         }
-        
+
+        private int _uninstallCurrent;
+
+        public int UninstallCurrent
+        {
+            get { return _uninstallCurrent; }
+            set
+            {
+                _uninstallCurrent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _uninstallTotal;
+
+        public int UninstallTotal
+        {
+            get { return _uninstallTotal; }
+            set
+            {
+                _uninstallTotal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _uninstallProgress;
+
+        public int UninstallProgress
+        {
+            get { return _uninstallProgress; }
+            set
+            {
+                _uninstallProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _uninstallInProgress;
+
+        public bool UninstallInProgress
+        {
+            get { return _uninstallInProgress; }
+            set
+            {
+                _uninstallInProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _cancelling;
+
+        public bool Cancelling
+        {
+            get { return _cancelling; }
+            set
+            {
+                _cancelling = value;
+                OnPropertyChanged();
+            }
+        }
+
         public InstalledItemsViewModel(InstalledItemsView view)
         {
             _view = view;
-            UninstallCommand = new DelegateCommand(Uninstall);
+
+            UninstallCommand       = new DelegateCommand(Uninstall);
+            CancelUninstallCommand = new DelegateCommand(CancelUninstall);
 
             LoadUninstallableItems();
+        }
+
+        private void CancelUninstall()
+        {
+            Cancelling          = true;
+            UninstallInProgress = false;
         }
 
         private void LoadUninstallableItems()
@@ -48,6 +117,13 @@ namespace TotalUninstaller
                                                    .OrderBy(ins => ins.Product);
             
             Items = new ObservableCollection<InstalledItem>(installations);
+
+            Cancelling          = false;
+            UninstallInProgress = false;
+            UninstallCurrent    = 0;
+            UninstallTotal      = 0;
+            UninstallProgress   = 0;
+
         }
         
         private void Uninstall()
@@ -70,15 +146,20 @@ namespace TotalUninstaller
                 if (t.Result == MessageDialogResult.Negative)
                     return;
 
-                foreach (InstalledItem item in itemsToUninstall)
+                UninstallInProgress = true;
+                UninstallTotal = count;
+                foreach (InstalledItem item in itemsToUninstall.TakeWhile(item => !Cancelling))
                     Uninstall(item);
 
                 LoadUninstallableItems();
             });
         }
 
-        private static void Uninstall(InstalledItem item)
+        private void Uninstall(InstalledItem item)
         {
+            UninstallCurrent++;
+            UninstallProgress = UninstallCurrent * 100 / UninstallTotal;
+
             Installer.SetInternalUI(InstallUIOptions.ProgressOnly | InstallUIOptions.SourceResolutionOnly | InstallUIOptions.UacOnly);
             Installer.ConfigureProduct(item.ProductCode, 0, InstallState.Absent, "IGNOREDEPENDENCIES=\"ALL\"");
         }
@@ -88,7 +169,6 @@ namespace TotalUninstaller
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-
         }
     }
 }
