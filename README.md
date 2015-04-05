@@ -4,4 +4,11 @@ Windows software uninstaller. Especially useful for speeding up Visual Studio by
 
 ![screenshot](TotalUninstaller/img/screenshot.png)
 
+### Technologies
+
+- WPF
+- [MahApps](http://mahapps.com/) UI toolkit
+- [Costura.Fody](https://github.com/Fody/Costura) Dependency packaging
+
+
 Adapted from code by [Konstantin](https://totaluninstaller.codeplex.com/)
