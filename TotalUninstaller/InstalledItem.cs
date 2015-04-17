@@ -21,5 +21,10 @@ namespace TotalUninstaller
             Url             = url;
             Version         = version;
         }
+
+        public override string ToString()
+        {
+            return Product;
+        }
     }
 }

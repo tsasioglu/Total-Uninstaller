@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Deployment.WindowsInstaller;
+using NLog;
 
 namespace TotalUninstaller
 {
     public class InstalledItemsViewModel : INotifyPropertyChanged
     {
+        readonly Logger _logger = LogManager.GetLogger("log");
         private readonly InstalledItemsView _view;
 
         public ICommand UninstallCommand { get; set; }
@@ -29,7 +31,6 @@ namespace TotalUninstaller
         }
 
         private int _uninstallCurrent;
-
         public int UninstallCurrent
         {
             get { return _uninstallCurrent; }
@@ -41,7 +42,6 @@ namespace TotalUninstaller
         }
 
         private int _uninstallTotal;
-
         public int UninstallTotal
         {
             get { return _uninstallTotal; }
@@ -53,7 +53,6 @@ namespace TotalUninstaller
         }
 
         private int _uninstallProgress;
-
         public int UninstallProgress
         {
             get { return _uninstallProgress; }
@@ -65,7 +64,6 @@ namespace TotalUninstaller
         }
 
         private bool _uninstallInProgress;
-
         public bool UninstallInProgress
         {
             get { return _uninstallInProgress; }
@@ -77,7 +75,6 @@ namespace TotalUninstaller
         }
 
         private bool _cancelling;
-
         public bool Cancelling
         {
             get { return _cancelling; }
@@ -90,6 +87,7 @@ namespace TotalUninstaller
 
         public InstalledItemsViewModel(InstalledItemsView view)
         {
+            _logger.Info("Startup");
             _view = view;
 
             UninstallCommand       = new DelegateCommand(Uninstall);
@@ -100,6 +98,7 @@ namespace TotalUninstaller
 
         private void CancelUninstall()
         {
+            _logger.Info("Canceling uninstall");
             Cancelling          = true;
             UninstallInProgress = false;
         }
@@ -116,6 +115,8 @@ namespace TotalUninstaller
                                                                                     ins.ProductVersion))
                                                    .OrderBy(ins => ins.Product);
             
+            _logger.Info("Found {0} installed items", installations.Count());
+
             Items = new ObservableCollection<InstalledItem>(installations);
 
             Cancelling          = false;
@@ -123,7 +124,6 @@ namespace TotalUninstaller
             UninstallCurrent    = 0;
             UninstallTotal      = 0;
             UninstallProgress   = 0;
-
         }
         
         private void Uninstall()
@@ -146,6 +146,7 @@ namespace TotalUninstaller
                 if (t.Result == MessageDialogResult.Negative)
                     return;
 
+                _logger.Info("Uninstalling {0} item{1}: {2}", count, plural, String.Join(",", itemsToUninstall));
                 UninstallInProgress = true;
                 UninstallTotal = count;
                 foreach (InstalledItem item in itemsToUninstall.TakeWhile(item => !Cancelling))
@@ -157,13 +158,16 @@ namespace TotalUninstaller
 
         private void Uninstall(InstalledItem item)
         {
+            _logger.Info("Uninstalling {0}", item);
             UninstallCurrent++;
             UninstallProgress = UninstallCurrent * 100 / UninstallTotal;
 
             Installer.SetInternalUI(InstallUIOptions.ProgressOnly | InstallUIOptions.SourceResolutionOnly | InstallUIOptions.UacOnly);
             Installer.ConfigureProduct(item.ProductCode, 0, InstallState.Absent, "IGNOREDEPENDENCIES=\"ALL\"");
+
+            _logger.Info("Uninstalled {0}", item);
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
