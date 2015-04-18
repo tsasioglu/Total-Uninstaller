@@ -143,16 +143,23 @@ namespace TotalUninstaller
 
             task.ContinueWith(t =>
             {
-                if (t.Result == MessageDialogResult.Negative)
-                    return;
+                try
+                {
+                    if (t.Result == MessageDialogResult.Negative)
+                        return;
+                    
+                    _logger.Info("Uninstalling {0} item{1}: {2}", count, plural, String.Join(",", itemsToUninstall));
+                    UninstallInProgress = true;
+                    UninstallTotal = count;
+                    foreach (InstalledItem item in itemsToUninstall.TakeWhile(item => !Cancelling))
+                        Uninstall(item);
 
-                _logger.Info("Uninstalling {0} item{1}: {2}", count, plural, String.Join(",", itemsToUninstall));
-                UninstallInProgress = true;
-                UninstallTotal = count;
-                foreach (InstalledItem item in itemsToUninstall.TakeWhile(item => !Cancelling))
-                    Uninstall(item);
-
-                LoadUninstallableItems();
+                    LoadUninstallableItems();
+                }
+                catch (Exception e)
+                {
+                    _logger.Error("Error uninstalling:", e);
+                }
             });
         }
 
