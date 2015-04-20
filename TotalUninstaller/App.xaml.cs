@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
 using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace TotalUninstaller
 {
@@ -12,7 +14,24 @@ namespace TotalUninstaller
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            ConfigureLogging();
             DispatcherUnhandledException += OnDispatcherUnhandledException;
+        }
+
+        private void ConfigureLogging()
+        {
+            var config = new LoggingConfiguration();
+
+            var target      = new FileTarget();
+            target.Name     = "log";
+            target.FileName = @"${specialfolder:folder=ApplicationData}/TotalUninstaller/log_${cached:${longdate}:cached=true}.txt";
+            target.Layout   = @"${longdate} ${message} ${exception:format=tostring}";
+            config.AddTarget("log", target);
+
+            var rule = new LoggingRule("*", LogLevel.Trace, target);
+            config.LoggingRules.Add(rule);
+
+            LogManager.Configuration = config;
         }
 
         private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs args)
