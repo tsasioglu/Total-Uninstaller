@@ -18,6 +18,7 @@ namespace TotalUninstaller
 
         public ICommand UninstallCommand { get; set; }
         public ICommand CancelUninstallCommand { get; set; }
+        public DelegateCommand SelectCommand { get; set; }
 
         private ObservableCollection<InstalledItem> _items; 
         public  ObservableCollection<InstalledItem> Items 
@@ -92,8 +93,15 @@ namespace TotalUninstaller
 
             UninstallCommand       = new DelegateCommand(Uninstall);
             CancelUninstallCommand = new DelegateCommand(CancelUninstall);
+            SelectCommand          = new DelegateCommand(SelectForUninstall);
 
             LoadUninstallableItems();
+        }
+        
+        private void SelectForUninstall()
+        {
+            foreach (var row in _view.DataGrid.SelectedItems.Cast<InstalledItem>())
+                row.Uninstall = true;
         }
 
         private void CancelUninstall()

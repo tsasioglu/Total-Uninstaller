@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TotalUninstaller
 {
-    public class InstalledItem
+    public class InstalledItem : INotifyPropertyChanged
     {
         public string   Product         { get; set; }
         public string   ProductCode     { get; set; }
@@ -10,7 +12,20 @@ namespace TotalUninstaller
         public string   InstallLocation { get; set; }
         public Uri      Url             { get; set; }
         public Version  Version         { get; set; }
-        public bool     Uninstall       { get; set; }
+        private bool _uninstall;
+
+        public bool Uninstall
+        {
+            get
+            {
+                return _uninstall;
+            }
+            set
+            {
+                _uninstall = value;
+                OnPropertyChanged();
+            }
+        }
 
         public InstalledItem(string product, string productCode, DateTime installDate, string installLocation, Uri url, Version version)
         {
@@ -25,6 +40,13 @@ namespace TotalUninstaller
         public override string ToString()
         {
             return Product;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -36,6 +36,13 @@
                 <DataGridHyperlinkColumn Header="Url"              Binding="{Binding Url}"             IsReadOnly="True"/>
                 <DataGridTextColumn      Header="Version"          Binding="{Binding Version}"         IsReadOnly="True"/>
             </DataGrid.Columns>
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding SelectCommand}"
+                              Header="Mark for uninstall"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
 
         <StackPanel Grid.Row="1" 
