@@ -4,6 +4,12 @@ Windows software uninstaller. Especially useful for speeding up Visual Studio by
 
 ![screenshot](TotalUninstaller/img/screenshot.png)
 
+### Troubleshooting
+
+- Right click -> run as admin
+- Right click -> properties -> general -> 'Unblock' (You'll only see the option if your local security policy is strict)
+- Log location:  %APPDATA%/TotalUninstaller
+
 ### Technologies
 
 - WPF
