@@ -20,6 +20,9 @@ namespace TotalUninstaller
         public ICommand CancelUninstallCommand { get; set; }
         public DelegateCommand SelectCommand { get; set; }
 
+        public ObservableCollection<InstalledItem> AllItems { get; private set; }
+
+
         private ObservableCollection<InstalledItem> _items; 
         public  ObservableCollection<InstalledItem> Items 
         {
@@ -124,8 +127,8 @@ namespace TotalUninstaller
                                                    .OrderBy(ins => ins.Product);
             
             _logger.Info("Found {0} installed items", installations.Count());
-
-            Items = new ObservableCollection<InstalledItem>(installations);
+            AllItems = new ObservableCollection<InstalledItem>(installations);
+            Items = AllItems;
 
             Cancelling          = false;
             UninstallInProgress = false;
