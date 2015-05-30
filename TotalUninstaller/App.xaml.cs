@@ -18,18 +18,20 @@ namespace TotalUninstaller
             DispatcherUnhandledException += OnDispatcherUnhandledException;
         }
 
-        private void ConfigureLogging()
+        private static void ConfigureLogging()
         {
             var config = new LoggingConfiguration();
 
-            var target      = new FileTarget();
-            target.Name     = "log";
-            target.FileName = @"${specialfolder:folder=ApplicationData}/TotalUninstaller/log_${cached:${longdate}:cached=true}.txt";
-            target.Layout   = @"${longdate} ${message} ${exception:format=tostring}";
-            config.AddTarget("log", target);
+            using (var target = new FileTarget())
+            {
+                target.Name     = "log";
+                target.FileName = @"${specialfolder:folder=ApplicationData}/TotalUninstaller/log_${cached:${longdate}:cached=true}.txt";
+                target.Layout   = @"${longdate} ${message} ${exception:format=tostring}";
+                config.AddTarget("log", target);
 
-            var rule = new LoggingRule("*", LogLevel.Trace, target);
-            config.LoggingRules.Add(rule);
+                var rule = new LoggingRule("*", LogLevel.Trace, target);
+                config.LoggingRules.Add(rule);
+            }
 
             LogManager.Configuration = config;
         }
