@@ -37,11 +37,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn      Header="Product"          Binding="{Binding Product}"         IsReadOnly="True"/>
-                <DataGridTextColumn      Header="Install Date"     Binding="{Binding InstallDate}"     IsReadOnly="True" />
-                <DataGridTextColumn      Header="Install Location" Binding="{Binding InstallLocation}" IsReadOnly="True"/>
-                <DataGridHyperlinkColumn Header="Url"              Binding="{Binding Url}"             IsReadOnly="True"/>
-                <DataGridTextColumn      Header="Version"          Binding="{Binding Version}"         IsReadOnly="True"/>
+                <DataGridTextColumn      Header="Product"          Binding="{Binding Product}"                         IsReadOnly="True"/>
+                <DataGridTextColumn      Header="Install Date"     Binding="{Binding InstallDate, StringFormat=d}"     IsReadOnly="True" />
+                <DataGridTextColumn      Header="Install Location" Binding="{Binding InstallLocation}"                 IsReadOnly="True"/>
+                <DataGridHyperlinkColumn Header="Url"              Binding="{Binding Url}"                             IsReadOnly="True"/>
+                <DataGridTextColumn      Header="Version"          Binding="{Binding Version}"                         IsReadOnly="True"/>
             </DataGrid.Columns>
 
             <DataGrid.ContextMenu>

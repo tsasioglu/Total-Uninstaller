@@ -8,7 +8,7 @@ namespace TotalUninstaller
     {
         public string   Product         { get; set; }
         public string   ProductCode     { get; set; }
-        public string   InstallDate     { get; set; }
+        public DateTime   InstallDate     { get; set; }
         public string   InstallLocation { get; set; }
         public Uri      Url             { get; set; }
         public Version  Version         { get; set; }
@@ -31,7 +31,7 @@ namespace TotalUninstaller
         {
             Product         = product;
             ProductCode     = productCode;
-            InstallDate     = installDate.ToShortDateString();
+            InstallDate     = installDate;
             InstallLocation = installLocation;
             Url             = url;
             Version         = version;

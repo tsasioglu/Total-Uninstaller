@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Threading;
 using NLog;
 using NLog.Config;
@@ -16,6 +18,9 @@ namespace TotalUninstaller
             base.OnStartup(e);
             ConfigureLogging();
             DispatcherUnhandledException += OnDispatcherUnhandledException;
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),new FrameworkPropertyMetadata(
+                XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
         }
 
         private static void ConfigureLogging()
