@@ -13,9 +13,6 @@
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         TitleCaps="False">
-    
-    
-    
     <controls:MetroWindow.Resources>
         <totalUninstaller:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </controls:MetroWindow.Resources>
@@ -28,7 +25,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="DataGrid" Grid.Row="0" AutoGenerateColumns="False" ItemsSource="{Binding FilteredItems}" Grid.ColumnSpan="2">
+        <DataGrid x:Name="DataGrid" Grid.Row="0" AutoGenerateColumns="False" ItemsSource="{Binding FilteredItems}" Grid.ColumnSpan="2" KeyDown="DataGrid_OnKeyDown">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Uninstall">
                     <DataGridTemplateColumn.CellTemplate>

@@ -20,7 +20,7 @@ namespace TotalUninstaller
 
         public ICommand UninstallCommand { get; set; }
         public ICommand CancelUninstallCommand { get; set; }
-        public DelegateCommand SelectCommand { get; set; }
+        public ICommand SelectCommand { get; set; }
 
         private ICollectionView _filteredItems;
         public ICollectionView FilteredItems
