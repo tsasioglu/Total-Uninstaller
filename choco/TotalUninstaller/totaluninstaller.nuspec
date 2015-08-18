@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>total-uninstaller</id>
+    <title>TotalUninstaller</title>
+    <version>0.0.1.20150810</version>
+    <authors>tsasioglu</authors>
+    <owners>tsasioglu,vorou</owners>
+    <summary>Windows software uninstaller</summary>
+    <description>Windows software uninstaller. Especially useful for speeding up Visual Studio by removing some of the bloat. Requires admin rights to run.
+
+TotalUninstaller.exe will be on your PATH after installation.
+    </description>
+    <projectUrl>https://github.com/tsasioglu/Total-Uninstaller</projectUrl>
+    <tags>uninstall program applications</tags>
+    <copyright>tsasioglu</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
