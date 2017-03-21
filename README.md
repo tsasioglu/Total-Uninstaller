@@ -1,6 +1,6 @@
 # Total-Uninstaller
 
-Windows software uninstaller. Especially useful for speeding up Visual Studio by removing some of the bloat. Requires admin rights to run. [Download zero install exe](https://github.com/tsasioglu/Total-Uninstaller/releases/download/v1.0/TotalUninstaller.exe)
+Windows software uninstaller. Especially useful for speeding up Visual Studio by removing some of the bloat. Requires admin rights to run. [Download zero install exe](https://github.com/tsasioglu/Total-Uninstaller/releases/download/v1.0.1/TotalUninstaller.exe)
 
 ![screenshot](TotalUninstaller/img/screenshot.png)
 
