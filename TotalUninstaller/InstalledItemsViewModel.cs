@@ -15,7 +15,7 @@ namespace TotalUninstaller
 {
     public class InstalledItemsViewModel : INotifyPropertyChanged
     {
-        readonly Logger _logger = LogManager.GetLogger("log");
+        private readonly Logger _logger = LogManager.GetLogger("log");
         private readonly InstalledItemsView _view;
 
         public ICommand UninstallCommand { get; set; }
@@ -148,8 +148,8 @@ namespace TotalUninstaller
                                                                                     ins.ProductCode, 
                                                                                     ins.InstallDate, 
                                                                                     ins.InstallLocation, 
-                                                                                    ins.UrlInfoAbout, 
-                                                                                    ins.ProductVersion))
+                                                                                    ins.UrlInfoAbout,
+                                                                                    GetProductVersion(ins)))
                                                    .OrderBy(ins => ins.Product);
             
             _logger.Info("Found {0} installed items", installations.Count());
@@ -163,6 +163,19 @@ namespace TotalUninstaller
             UninstallCurrent    = 0;
             UninstallTotal      = 0;
             UninstallProgress   = 0;
+        }
+
+        private Version GetProductVersion(ProductInstallation ins)
+        {
+            try
+            {
+                return ins.ProductVersion;
+            }
+            catch (Exception)
+            {
+                _logger.Warn("Count not determine product version for '{0}'", ins.ProductName);
+                return new Version(0, 0, 0, 0);
+            }
         }
 
         private Predicate<object> ItemFilter()
